@@ -1,0 +1,5 @@
+# You can put in overrides for the default values.yaml and components.yaml here
+# They will impact every PR environment
+defaultComponent:
+  autoscaling:
+    enabled: false
