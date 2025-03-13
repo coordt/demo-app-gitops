@@ -10,19 +10,21 @@ spec:
   - pullRequest:
       github:
         owner: coordt
-        repo: gitops-demo
+        repo: demo-app-gitops
   template:
     metadata:
       name: 'demo-app-{{ .branch }}'
     spec:
       source:
-        repoURL: 'https://<repository url>'
+        repoURL: 'https://github.com/coordt/demo-app-gitops'
         targetRevision: '{{ .branch }}'
         path: "chart/" # Path to helm chart
         helm:
           releaseName: 'demo-app-{{ .branch }}'
           valuesObject:
             branch: '{{ .branch }}'
+            service:
+              type: ClusterIP
 
       project: default
       destination:
