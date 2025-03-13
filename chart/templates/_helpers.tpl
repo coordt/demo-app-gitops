@@ -48,7 +48,7 @@ Selector labels
 {{- define "demo-app.selectorLabels" -}}
 app.kubernetes.io/name: {{ include "demo-app.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/part-of: {{ include "demo-app.fullname" . git}}
+app.kubernetes.io/part-of: {{ include "demo-app.fullname" . }}
 {{- end }}
 
 {{/*
