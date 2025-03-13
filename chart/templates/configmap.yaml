@@ -6,4 +6,4 @@ metadata:
   labels:
     {{- include "demo-app.labels" . | nindent 4 }}
 data:
-{{ .Files.Get "environment-vars.env" | indent 2 }}
+{{ .Files.Get "environment-vars.txt" | indent 2 }}
