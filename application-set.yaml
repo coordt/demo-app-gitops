@@ -7,22 +7,29 @@ spec:
   goTemplate: true
   goTemplateOptions: ["missingkey=error"]
   generators:
-  - pullRequest:
-      github:
-        owner: coordt
-        repo: demo-app-gitops
+    - git:
+        repoURL: https://github.com/coordt/demo-app-gitops.git
+        revision: HEAD
+        directories:
+          - path: chart
+        values:
+          service-type: LoadBalancer
+    - pullRequest:
+        github:
+          owner: coordt
+          repo: demo-app-gitops
   template:
     metadata:
-      name: 'demo-app-{{ .branch }}'
+      name: 'demo-app-{{ dig "branch" "prod" . }}'
     spec:
       source:
-        repoURL: 'https://github.com/coordt/demo-app-gitops'
-        targetRevision: '{{ .branch }}'
+        repoURL: 'https://github.com/coordt/demo-app-gitops.git'
+        targetRevision: '{{ dig "branch" "HEAD" . }}'
         path: "chart/" # Path to helm chart
         helm:
-          releaseName: 'demo-app-{{ .branch }}'
+          releaseName: 'demo-app-{{ dig "branch" "prod" . }}'
           valuesObject:
-            branch: '{{ .branch }}'
+            branch: '{{ dig "branch" "master" . }}'
             service:
               type: ClusterIP
 

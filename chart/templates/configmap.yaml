@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-{{ .Values.branch }}
+  namespace: {{ .Values.Namespace }}
+  labels:
+    {{- include "demo-app.labels" . | nindent 4 }}
+data:
+{{ .Files.Get "environment-vars.env" | indent 2 }}
