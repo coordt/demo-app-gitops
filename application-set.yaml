@@ -1,0 +1,41 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: demo-appset
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - pullRequest:
+      github:
+        owner: coordt
+        repo: demo-app-gitops
+  template:
+    metadata:
+      name: 'demo-app-{{ .branch }}'
+    spec:
+      source:
+        repoURL: 'https://github.com/coordt/demo-app-gitops'
+        targetRevision: '{{ .branch }}'
+        path: "chart/" # Path to helm chart
+        helm:
+          releaseName: 'demo-app-{{ .branch }}'
+          valuesObject:
+            branch: '{{ .branch }}'
+            service:
+              type: ClusterIP
+
+      project: default
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: 'demo-app-previews'
+
+      syncPolicy:
+        # Automate drift correction
+        automated:
+          prune: true
+          selfHeal: true
+        # Create namespace if it does not exist
+        syncOptions:
+        - CreateNamespace=true
